@@ -21,6 +21,7 @@ package org.crsh.vfs.spi.url;
 
 import org.crsh.util.InputStreamFactory;
 import org.crsh.util.Safe;
+import org.crsh.util.Utils;
 import org.crsh.util.ZipIterator;
 
 import java.io.FileInputStream;
@@ -118,7 +119,7 @@ public class Node implements Iterable<Resource> {
   private void _mergeEntries(URL url) throws IOException, URISyntaxException {
     if (url.getProtocol().equals("file")) {
       try {
-        java.io.File f = new java.io.File(url.toURI());
+        java.io.File f = Utils.toFile(url);
         if (f.isDirectory()) {
           merge(f);
         } else if (f.getName().endsWith(".jar")) {

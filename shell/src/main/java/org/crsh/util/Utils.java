@@ -19,6 +19,9 @@
 
 package org.crsh.util;
 
+import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -208,6 +211,28 @@ public class Utils {
       regex.append(Pattern.quote(globex.substring(prev)));
     }
     return regex.toString();
+  }
+
+  /**
+   * Convert an file URL to a file, avoids issues on windows with whitespaces.
+   *
+   * @param url the URL to convert
+   * @return the related file
+   * @throws java.lang.IllegalArgumentException if the url protocol is not file
+   * @throws java.lang.NullPointerException if the url argument is null
+   */
+  public static File toFile(URL url) throws IllegalArgumentException, NullPointerException {
+    if (url == null) {
+      throw new NullPointerException("No null URL accepted");
+    }
+    if (!url.getProtocol().equals("file")) {
+      throw new IllegalArgumentException("Not file protocol");
+    }
+    try {
+      return new File(url.toURI());
+    } catch(URISyntaxException e) {
+      return new File(url.getPath());
+    }
   }
 
 }
